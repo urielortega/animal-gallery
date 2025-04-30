@@ -15,7 +15,12 @@ struct AnimalPhoto: Identifiable {
     let user: User
 }
 
-struct Topic: Decodable {
+struct Topic {
+    let name: String
+    let status: String
+}
+
+private struct DecodableTopic: Decodable {
     let status: String
 }
 
@@ -53,9 +58,9 @@ extension AnimalPhoto: Decodable {
         regularImageURL = try urlsContainer.decode(String.self, forKey: .regular)
         smallImageURL = try urlsContainer.decode(String.self, forKey: .small)
         
-        let topicsDict = try container.decode([String : Topic].self, forKey: .topicSubmissions)
-        topics = topicsDict.map { $0.value } // Populate Array with Dictionary.
-        
+        let topicsDict = try container.decode([String : DecodableTopic].self, forKey: .topicSubmissions)
+        topics = topicsDict.map { Topic(name: $0.key, status: $0.value.status) }
+
         user = try container.decode(User.self, forKey: .user)
     }
 }
