@@ -7,8 +7,8 @@
 
 struct AnimalPhoto: Identifiable {
     let id: String
-    let description: String
-    let altDescription: String
+    let description: String?
+    let altDescription: String?
     let regularImageURL: String
     let smallImageURL: String
     let topics: [Topic]
@@ -51,8 +51,8 @@ extension AnimalPhoto: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         id = try container.decode(String.self, forKey: .id)
-        description = try container.decode(String.self, forKey: .description)
-        altDescription = try container.decode(String.self, forKey: .altDescription)
+        description = try container.decodeIfPresent(String.self, forKey: .description)
+        altDescription = try container.decodeIfPresent(String.self, forKey: .altDescription)
         
         let urlsContainer = try container.nestedContainer(keyedBy: URLKeys.self, forKey: .urls)
         regularImageURL = try urlsContainer.decode(String.self, forKey: .regular)
