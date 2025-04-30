@@ -8,6 +8,7 @@
 import Foundation
 
 enum APIError: Error {
+    case invalidURL
     case missingData
     case networkError
     case decodingError
@@ -17,6 +18,8 @@ enum APIError: Error {
 extension APIError: LocalizedError {
     var errorDescription: String? {
         switch self {
+        case .invalidURL:
+            return NSLocalizedString("Invalid URL!", comment: "")
         case .missingData:
             return NSLocalizedString("No data was returned from the server.", comment: "")
         case .networkError:
