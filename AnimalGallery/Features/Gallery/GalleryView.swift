@@ -15,13 +15,28 @@ struct GalleryView: View {
     @State private var hasError = false
 
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            
-            Text("GalleryView will show \(provider.photos.count) photos!")
-                .padding()
+        NavigationStack {
+            List {
+                ForEach(provider.photos) { photo in
+                    HStack {
+                        Text(photo.description ?? "No description")
+                        
+                        Spacer()
+                        
+                        AsyncImage(url: URL(string: photo.smallImageURL), scale: 3) { image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: 100, height: 100) // To save the space for the image and the progress indicator.
+                        .accessibilityHidden(true) // To make the view invisible to the accessibility system.
+                    }
+                }
+            }
+            .listStyle(.inset)
+            .navigationTitle("Animal Gallery")
         }
         .task {
             await fetchPhotos()
