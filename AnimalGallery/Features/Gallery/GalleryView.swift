@@ -14,7 +14,7 @@ struct GalleryView: View {
     @State private var error: APIError?
     @State private var hasError = false
     
-    let layout = [
+    private let layout = [
         GridItem(
             .adaptive(minimum: UIDevice.current.userInterfaceIdiom == .pad ? 200 : 160)
         )
@@ -79,7 +79,7 @@ extension GalleryView {
     }
 }
 
-extension GalleryView {
+private extension GalleryView {
     func fetchPhotos() async {
         isLoading = true
         
