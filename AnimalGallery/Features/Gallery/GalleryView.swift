@@ -27,7 +27,7 @@ struct GalleryView: View {
                     ForEach(provider.photos) { animalPhoto in
                         NavigationLink {
                             DetailView()
-                                .padding(5)
+                                .padding()
                         } label: {
                             AnimalPhotoLabel(animalPhoto: animalPhoto)
                         }
@@ -57,26 +57,24 @@ extension GalleryView {
                     ProgressView()
                 }
                 .padding()
-                .frame(height: 120) // To save the space for the image and the progress indicator.
+                .frame(height: 100) // To save the space for the image and the progress indicator.
                 .padding()
-                
-                Spacer()
-                
-                Text(animalPhoto.description ?? "No description")
-                    .font(.caption)
-                    .lineLimit(1)
-                    .frame(maxWidth: .infinity)
-                    .padding(5)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .foregroundStyle(Color(.label)) // To show an appropriate color in both light and dark mode.
             .cornerRadius(22)
             .overlay {
                 RoundedRectangle(cornerRadius: 22)
-                    .stroke(.gray.gradient.opacity(0.1), lineWidth: 3)
+                    .stroke(.gray.gradient.opacity(0.2), lineWidth: 3)
                     .shadow(radius: 2)
             }
             .padding()
+            .accessibilityElement()
+            .accessibilityLabel(
+                "Description: \(animalPhoto.description ?? "No description")"
+            )
+            .accessibilityHint("Photo taken by: \(animalPhoto.user)")
+
         }
     }
 }
