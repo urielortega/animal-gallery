@@ -14,6 +14,12 @@ struct GalleryView: View {
     @State private var error: APIError?
     @State private var hasError = false
     
+    let layout = [
+        GridItem(
+            .adaptive(minimum: UIDevice.current.userInterfaceIdiom == .pad ? 200 : 160)
+        )
+    ]
+    
     var body: some View {
         NavigationStack {
             List {
