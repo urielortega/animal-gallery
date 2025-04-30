@@ -43,7 +43,7 @@ struct GalleryView: View {
                     LazyVGrid(columns: layout) {
                         ForEach(provider.photos) { animalPhoto in
                             NavigationLink {
-                                DetailView()
+                                DetailView(animalPhoto: animalPhoto)
                                     .padding()
                             } label: {
                                 AnimalPhotoLabel(animalPhoto: animalPhoto)
