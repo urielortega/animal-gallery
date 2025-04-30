@@ -47,4 +47,12 @@ extension GalleryView {
 
 #Preview {
     GalleryView()
+        .environmentObject(
+            AnimalProvider(
+                client: AnimalClient(
+                    downloader: TestDownloader()
+                )
+            )
+        )
+
 }
