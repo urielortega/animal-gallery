@@ -21,9 +21,13 @@ class AnimalProvider: ObservableObject {
     /// Fetches photos from the remote API using AnimalClient. The fetched photos are stored in the `photos` property.
     func fetchPhotos() async throws {
         let latestPhotos = try await client.animalPhotos
-        print("latestPhotos count = \(latestPhotos.count)")
         
         self.photos = latestPhotos
+    }
+    
+    func fetchMorePhotos() async throws {
+        let morePhotos = try await client.animalPhotos
+        self.photos += morePhotos
     }
     
     /// Initializes a new AnimalProvider instance with an optional custom AnimalClient. If no client is provided, the default is to use a new instance of AnimalClient.

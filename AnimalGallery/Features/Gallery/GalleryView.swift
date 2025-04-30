@@ -11,6 +11,7 @@ struct GalleryView: View {
     @EnvironmentObject var provider: AnimalProvider
     
     @State var isLoading = false
+    @State private var isLoadingMore = false
     @State private var error: APIError?
     @State private var hasError = false
     
@@ -49,6 +50,21 @@ struct GalleryView: View {
                             }
                         }
                     }
+                    
+                    if isLoadingMore {
+                        ProgressView()
+                            .padding()
+                    } else {
+                        Button("Cargar más") {
+                            Task {
+                                await loadMorePhotos()
+                            }
+                        }
+                        .padding()
+                        .buttonStyle(.borderedProminent)
+                    }
+                    
+                    
                 }
             }
             .navigationTitle("Animal Gallery")
@@ -60,7 +76,7 @@ struct GalleryView: View {
             await fetchPhotos()
         }
         .alert(isPresented: $hasError, error: error) {}
-
+        
     }
 }
 
@@ -115,6 +131,17 @@ private extension GalleryView {
         }
         
         isLoading = false
+    }
+    
+    func loadMorePhotos() async {
+        isLoadingMore = true
+        do {
+            try await provider.fetchMorePhotos()
+        } catch {
+            self.error = error as? APIError ?? .unexpectedError(error: error)
+            self.hasError = true
+        }
+        isLoadingMore = false
     }
 }
 
