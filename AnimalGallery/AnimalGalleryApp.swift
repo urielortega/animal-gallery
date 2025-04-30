@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct AnimalGalleryApp: App {
+    @StateObject var animalProvider = AnimalProvider()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(animalProvider)
         }
     }
 }
