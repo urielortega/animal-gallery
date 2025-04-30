@@ -23,13 +23,30 @@ struct GalleryView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVGrid(columns: layout) {
-                    ForEach(provider.photos) { animalPhoto in
-                        NavigationLink {
-                            DetailView()
-                                .padding()
-                        } label: {
-                            AnimalPhotoLabel(animalPhoto: animalPhoto)
+                if isLoading {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, minHeight: 300)
+                } else if hasError {
+                    VStack {
+                        Text("Ocurrió un error")
+                            .font(.headline)
+                        Text(error?.localizedDescription ?? "Error desconocido")
+                            .font(.subheadline)
+                        Button("Reintentar") {
+                            Task { await fetchPhotos() }
+                        }
+                        .padding(.top)
+                    }
+                    .padding()
+                } else {
+                    LazyVGrid(columns: layout) {
+                        ForEach(provider.photos) { animalPhoto in
+                            NavigationLink {
+                                DetailView()
+                                    .padding()
+                            } label: {
+                                AnimalPhotoLabel(animalPhoto: animalPhoto)
+                            }
                         }
                     }
                 }
@@ -39,9 +56,15 @@ struct GalleryView: View {
         .task {
             await fetchPhotos()
         }
+        .refreshable {
+            await fetchPhotos()
+        }
+        .alert(isPresented: $hasError, error: error) {}
+
     }
 }
 
+// LABELS:
 extension GalleryView {
     struct AnimalPhotoLabel: View {
         var animalPhoto: AnimalPhoto
@@ -74,11 +97,12 @@ extension GalleryView {
                 "Description: \(animalPhoto.description ?? "No description")"
             )
             .accessibilityHint("Photo taken by: \(animalPhoto.user)")
-
+            
         }
     }
 }
 
+// LOGIC:
 private extension GalleryView {
     func fetchPhotos() async {
         isLoading = true
