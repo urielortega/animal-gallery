@@ -22,34 +22,61 @@ struct GalleryView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(provider.photos) { photo in
-                    NavigationLink {
-                        DetailView()
-                    } label: {
-                        HStack {
-                            Text(photo.description ?? "No description")
-                            
-                            Spacer()
-                            
-                            AsyncImage(url: URL(string: photo.smallImageURL), scale: 3) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(width: 100, height: 100) // To save the space for the image and the progress indicator.
+            ScrollView {
+                LazyVGrid(columns: layout) {
+                    ForEach(provider.photos) { animalPhoto in
+                        NavigationLink {
+                            DetailView()
+                                .padding(5)
+                        } label: {
+                            AnimalPhotoLabel(animalPhoto: animalPhoto)
                         }
-                        
                     }
                 }
             }
-            .listStyle(.inset)
             .navigationTitle("Animal Gallery")
         }
         .task {
             await fetchPhotos()
+        }
+    }
+}
+
+extension GalleryView {
+    struct AnimalPhotoLabel: View {
+        var animalPhoto: AnimalPhoto
+        
+        var body: some View {
+            VStack(spacing: 0) {
+                AsyncImage(url: URL(string: animalPhoto.smallImageURL), scale: 3) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .clipped()
+                } placeholder: {
+                    ProgressView()
+                }
+                .padding()
+                .frame(height: 120) // To save the space for the image and the progress indicator.
+                .padding()
+                
+                Spacer()
+                
+                Text(animalPhoto.description ?? "No description")
+                    .font(.caption)
+                    .lineLimit(1)
+                    .frame(maxWidth: .infinity)
+                    .padding(5)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .foregroundStyle(Color(.label)) // To show an appropriate color in both light and dark mode.
+            .cornerRadius(22)
+            .overlay {
+                RoundedRectangle(cornerRadius: 22)
+                    .stroke(.gray.gradient.opacity(0.1), lineWidth: 3)
+                    .shadow(radius: 2)
+            }
+            .padding()
         }
     }
 }
