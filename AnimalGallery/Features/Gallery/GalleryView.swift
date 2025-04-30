@@ -13,25 +13,30 @@ struct GalleryView: View {
     @State var isLoading = false
     @State private var error: APIError?
     @State private var hasError = false
-
+    
     var body: some View {
         NavigationStack {
             List {
                 ForEach(provider.photos) { photo in
-                    HStack {
-                        Text(photo.description ?? "No description")
-                        
-                        Spacer()
-                        
-                        AsyncImage(url: URL(string: photo.smallImageURL), scale: 3) { image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                        } placeholder: {
-                            ProgressView()
+                    NavigationLink {
+                        DetailView()
+                    } label: {
+                        HStack {
+                            Text(photo.description ?? "No description")
+                            
+                            Spacer()
+                            
+                            AsyncImage(url: URL(string: photo.smallImageURL), scale: 3) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(width: 100, height: 100) // To save the space for the image and the progress indicator.
+                            .accessibilityHidden(true) // To make the view invisible to the accessibility system.
                         }
-                        .frame(width: 100, height: 100) // To save the space for the image and the progress indicator.
-                        .accessibilityHidden(true) // To make the view invisible to the accessibility system.
+                        
                     }
                 }
             }
@@ -69,5 +74,4 @@ extension GalleryView {
                 )
             )
         )
-
 }
