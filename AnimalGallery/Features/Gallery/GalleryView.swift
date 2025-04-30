@@ -34,7 +34,6 @@ struct GalleryView: View {
                                 ProgressView()
                             }
                             .frame(width: 100, height: 100) // To save the space for the image and the progress indicator.
-                            .accessibilityHidden(true) // To make the view invisible to the accessibility system.
                         }
                         
                     }
