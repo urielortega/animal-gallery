@@ -118,7 +118,8 @@ extension GalleryView {
     }
 }
 
-// LOGIC:
+// LOGIC
+// TODO: Move to a ViewModel
 private extension GalleryView {
     func fetchPhotos() async {
         isLoading = true
