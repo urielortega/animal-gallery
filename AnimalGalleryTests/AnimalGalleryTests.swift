@@ -25,9 +25,11 @@ class AnimalGalleryTests: XCTestCase {
         XCTAssertTrue(containsAnimals, "The topics should contain 'animals'")
     }
     
-    /*
     func testClientDoesFetchAnimalPhotoData() async throws {
-
+        let downloader = TestDownloader()
+        let client = AnimalClient(downloader: downloader)
+        let animalPhotos = try await client.animalPhotos
+        
+        XCTAssertEqual(animalPhotos.count, 2)
     }
-     */
 }
