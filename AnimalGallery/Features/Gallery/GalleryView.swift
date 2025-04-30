@@ -72,9 +72,9 @@ struct GalleryView: View {
         .task {
             await fetchPhotos()
         }
-        .refreshable {
-            await fetchPhotos()
-        }
+//        .refreshable {
+//            await fetchPhotos()
+//        }
         .alert(isPresented: $hasError, error: error) {}
         
     }
